@@ -2,7 +2,10 @@ import os
 import discord
 from dotenv import load_dotenv
 
-load_dotenv()
+debug = False
+
+if debug == True:
+    load_dotenv()
 
 EvoToken = os.getenv("EvoToken")
 AbyssId = os.getenv("AbyssId")
