@@ -2,7 +2,7 @@ import os
 from dotenv import load_dotenv
 from discord.ext import commands
 
-debug = True
+debug = False
 
 if debug == True:
     load_dotenv()
