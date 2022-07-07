@@ -2,7 +2,7 @@ import os
 from dotenv import load_dotenv
 from discord.ext import commands
 
-debug = False
+debug = True
 
 if debug == True:
     load_dotenv()
@@ -15,7 +15,7 @@ TOKEN = os.getenv("EvoToken")
 
 @bot.event
 async def on_ready():
-    print(f"Logged in as {bot.user.name}({bot.user.id})")
+    print(f"Logged in as {bot.user.name}")
 
 @bot.command(aliases=['p'])
 async def ping(ctx):
