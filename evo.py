@@ -1,6 +1,6 @@
 import os
-import discord
 from dotenv import load_dotenv
+from discord.ext import commands
 
 debug = False
 
@@ -10,15 +10,16 @@ if debug == True:
 EvoToken = os.getenv("EvoToken")
 AbyssId = os.getenv("AbyssId")
 
+bot = commands.Bot(command_prefix="!")
+TOKEN = os.getenv("EvoToken")
 
-class MyClient(discord.Client):
-    async def on_ready(self):
-        print(f'Logged on as {self.user}!')
+@bot.event
+async def on_ready():
+    print(f"Logged in as {bot.user.name}({bot.user.id})")
 
-    async def on_message(self, message):
-        print('Message from {0.author}: {0.content}'.format(message))
+@bot.command(aliases=['p'])
+async def ping(ctx):
+    await ctx.send(f'```Время отклика: {round(bot.latency * 1000)} мс```')
 
-
-
-client = MyClient()
-client.run(EvoToken)
+if __name__ == "__main__":
+    bot.run(TOKEN)
