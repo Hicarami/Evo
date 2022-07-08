@@ -3,7 +3,7 @@ import discord
 from discord.ext import commands
 
 
-debug = True # Set to True to enable debug mode
+debug = False # Set to True to enable debug mode
 
 if debug == True:
     from dotenv import load_dotenv
