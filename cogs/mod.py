@@ -3,6 +3,7 @@ import pytz
 import discord
 from datetime import datetime
 from discord.ext import commands
+from config import *
 
 class Mod(commands.Cog):
 
@@ -14,9 +15,16 @@ class Mod(commands.Cog):
     @commands.has_permissions(manage_messages=True)
     async def clear(self, ctx, amount = 5):
         await ctx.channel.purge(limit=amount+1)
-        await ctx.send('yoink')
+        await ctx.send(f'{amount} {MESSEGES_WERE_DELETED}')
         time.sleep(1)
         await ctx.channel.purge(limit=1)
+
+    # Ban command
+    @commands.command()
+    @commands.has_permissions(ban_members=True)
+    async def ban(self, ctx, member : discord.Member, *, reason=None):
+        await member.ban(reason = reason)
+        await ctx.send(f'{USER} {member} {WAS_BANNED_REASON} {reason}')
 
     # Unban command
     @commands.command()
@@ -30,22 +38,15 @@ class Mod(commands.Cog):
 
             if (user.name, user.discriminator) == (member_name, member_discriminator):
                 await ctx.guild.unban(user)
-                await ctx.send(f'Пользователь {user.mention} был разбанен')
+                await ctx.send(f'{USER} {user.mention} {WAS_UNBANNED}')
                 return
-
-    # Ban command
-    @commands.command()
-    @commands.has_permissions(ban_members=True)
-    async def ban(self, ctx, member : discord.Member, *, reason=None):
-        await member.ban(reason = reason)
-        await ctx.send(f'Пользователь {member} был забанен по причине {reason}')
 
     # Kick command
     @commands.command()
     @commands.has_permissions(kick_members=True)
     async def kick(self, ctx, member : discord.Member, *, reason=None):
         await member.kick(reason = reason)
-        await ctx.send(f'Пользователь {member} был кикнут по причине {reason}')
+        await ctx.send(f'{USER} {member} {WAS_KICKED_REASON} {reason}')
 
     # Info command
     @commands.command(aliases=['user','i'])
@@ -55,30 +56,28 @@ class Mod(commands.Cog):
             member = ctx.author
 
         emb = discord.Embed(colour = 0x9F85FF)
-        emb.set_author(name = f'Информация о {member}')
+        emb.set_author(name = f'{INFO_ABOUT} {member}')
         emb.set_thumbnail(url = member.avatar_url)
-        emb.set_footer(text = f'Запрошено {ctx.author}', icon_url = ctx.author.avatar_url)
-        emb.add_field(name = "Имя на сервере:", value = member.display_name)
-        emb.add_field(name = "ID:", value = member.id)
-        emb.add_field(name = "Пинг:", value = member.mention)
+        emb.set_footer(text = f'{REQUESTED_BY}: {ctx.author}', icon_url = ctx.author.avatar_url)
+        emb.add_field(name = f'{NAME_ON_SERVER}:', value = member.display_name)
+        emb.add_field(name = f'{ID}:', value = member.id)
+        emb.add_field(name = f'{MENTION}:', value = member.mention)
+
+        old_timezone = pytz.timezone("GMT")
+        new_timezone = pytz.timezone(PYTZ_TIMEZONE)
 
         my_timestamp = member.joined_at
-        old_timezone = pytz.timezone("GMT")
-        new_timezone = pytz.timezone("Europe/Moscow")
         localized_timestamp = old_timezone.localize(my_timestamp)
         new_timezone_timestamp = localized_timestamp.astimezone(new_timezone)
-        emb.add_field(name = 'Присоединился:', value = new_timezone_timestamp.strftime('%x %H:%M:%S'), inline=True)
+        emb.add_field(name = f'{JOINED}:', value = new_timezone_timestamp.strftime('%x %H:%M:%S'), inline=True)
         s2 = new_timezone_timestamp.strftime('%Y-%m-%d %H:%M:%S')
 
         my_timestamp = member.created_at
-        old_timezone = pytz.timezone("GMT")
-        new_timezone = pytz.timezone("Europe/Moscow")
         localized_timestamp = old_timezone.localize(my_timestamp)
         new_timezone_timestamp = localized_timestamp.astimezone(new_timezone)
-        emb.add_field(name = 'Аккаунт создан:', value = new_timezone_timestamp.strftime("%x %H:%M:%S"), inline=True)
+        emb.add_field(name = f'{ACC_CREATED}:', value = new_timezone_timestamp.strftime("%x %H:%M:%S"), inline=True)
 
-        zone = pytz.timezone('Europe/Moscow')
-        date = datetime.now(zone)
+        date = datetime.now(new_timezone)
         s1 = date.strftime('%Y-%m-%d %H:%M:%S')
 
         fmt = '%Y-%m-%d %H:%M:%S'
@@ -92,7 +91,7 @@ class Mod(commands.Cog):
 
         td_mins = int(round(td.total_seconds() / 60 / 60))
         time = round(td_mins,1)
-        emb.add_field(name = 'Пробыл на сервере:', value = f'{time} часов', inline=True)
+        emb.add_field(name = BEEN_ON_SERVER, value = f'{time} {HOURS}', inline=True)
 
         await ctx.send(embed=emb)
 
@@ -104,28 +103,28 @@ class Mod(commands.Cog):
 
         if user_id != None and args != None:
             try:
-                target = await self.evo.fetch_user(user_id)
-                await target.send(args)
+                member = await self.evo.fetch_user(user_id)
+                await member.send(args)
                 emb3 = discord.Embed(colour = 0x9F85FF)
-                emb3.set_author(name=f'Сообщение было отправлено {target.name}')
-                emb3.add_field(name=f'Сообщение: `{args}`', value= '** **')
-                emb3.set_footer(text=f'Запрошено: {ctx.author}',icon_url=ctx.author.avatar_url)
+                emb3.set_author(name=f'{MSG_WAS_SENT} {member.name}')
+                emb3.add_field(name=f'{MSG}: `{args}`', value= '** **')
+                emb3.set_footer(text=f'{REQUESTED_BY}: {ctx.author}',icon_url=ctx.author.avatar_url)
                 await ctx.send(embed=emb3)
 
             except:
                 emb = discord.Embed(colour = 0x9F85FF)
-                emb.set_author(name='Пользователь не найден')
+                emb.set_author(name=f'{USER} {NOT_FOUND}')
                 await ctx.send(embed=emb)
 
         else:
             emb2 = discord.Embed(colour = 0x9F85FF)
-            emb2.set_author(name='Неверное использование команды')
-            emb2.add_field(name="Вот так:`>dm [id человека] [сообщение]`", value= '** **')
-            emb2.set_footer(text=f'Запрошено: {ctx.author}',icon_url=ctx.author.avatar_url)
+            emb2.set_author(name=INCORRECT_COMMAND_USAGE)
+            emb2.add_field(name=f"{USAGE}:`>dm [{ID}] [{MSG}]`", value= '** **')
+            emb2.set_footer(text=f'{REQUESTED_BY}: {ctx.author}',icon_url=ctx.author.avatar_url)
             await ctx.send(embed=emb2)
 
 
 
 def setup(evo):
     evo.add_cog(Mod(evo))
-    print('Mod loaded')
+    print(f'Mod {LOADED}')

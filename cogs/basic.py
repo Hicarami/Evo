@@ -1,5 +1,6 @@
 import discord
 from discord.ext import commands
+from config import LOGGED_AS, LATENCY_IS, LOADED
 
 class Basic(commands.Cog):
 
@@ -10,17 +11,25 @@ class Basic(commands.Cog):
     # On ready event
     @commands.Cog.listener()
     async def on_ready(self):
-        print(f'Logged in as {self.evo.user.name}')
-        print(f'Latency is {round(self.evo.latency * 1000)} ms')
-    
+        print("""
+                 _______            
+                (_______)           
+                 _____ _   _ ___    
+                |  ___) | | / _ \   
+                | |____\ V / |_| |  
+                |_______)_/ \___/   
+                      by Xhos
+        """)
+        print(f'{LOGGED_AS} {self.evo.user.name}')
+        print(f'{LATENCY_IS} {round(self.evo.latency * 1000)} ms')
 
     # Ping command
     @commands.command()
     async def ping(self, ctx):
-        await ctx.send(f'Время отклика: {round(self.evo.latency * 1000)} мс')
+        await ctx.send(f'{LATENCY_IS}: {round(self.evo.latency * 1000)} ms')
         
         
 
 def setup(evo):
     evo.add_cog(Basic(evo))
-    print('Basic loaded')
+    print(f'Basic {LOADED}')

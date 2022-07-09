@@ -1,5 +1,6 @@
 import discord
 from discord.ext import commands
+from config import MODMAIL_CHANNEL_NAME, LOADED
 
 class Mail(commands.Cog):
 
@@ -10,7 +11,7 @@ class Mail(commands.Cog):
     @commands.Cog.listener()
     async def on_message(self, message):
         empty_array = []
-        mail_channel = discord.utils.get(self.evo.get_all_channels(), name="🔒┃почта")
+        mail_channel = discord.utils.get(self.evo.get_all_channels(), name=MODMAIL_CHANNEL_NAME)
 
         if message.author == self.evo.user:
             return
@@ -26,7 +27,7 @@ class Mail(commands.Cog):
             else:
                 await mail_channel.send("[" + message.author.mention + "] " + message.content)
 
-        elif str(message.channel) == "🔒┃почта" and message.content.startswith("<"):
+        elif str(message.channel) == MODMAIL_CHANNEL_NAME and message.content.startswith("<"):
             member_object = message.mentions[0]
 
             if message.attachments != empty_array:
@@ -46,4 +47,4 @@ class Mail(commands.Cog):
 
 def setup(evo):
     evo.add_cog(Mail(evo))
-    print('Mail loaded')
+    print(f'Mail {LOADED}')
