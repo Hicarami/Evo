@@ -1,3 +1,5 @@
 .env
 vault.txt
 venv/
+__pycache__/
+*.pyc

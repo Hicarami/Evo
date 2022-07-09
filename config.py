@@ -5,7 +5,7 @@ LANGUAGE = 'EN'
 
 # Debug mode loads local dotenv file
 # Turn off debug mode before deploying
-DEBUG = True
+DEBUG = False
 
 PREFIX = '.'
 MODMAIL_CHANNEL_NAME = '🔒┃почта'
@@ -13,6 +13,8 @@ EMBED_COLOUR = '0x9F85FF'
 DICE_URL = 'https://i.imgur.com/HbLQ9CQ.png'
 COIN_URL = 'https://i.imgur.com/y3sZ7Ll.png'
 PYTZ_TIMEZONE = 'Europe/Moscow' # You can get yours here: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+CREATE_ROOM_CHANNEL_ID  = 926591934133325886
+ROOMS_CATEGORY_ID = 789390831957573664
 
 if LANGUAGE == 'EN':
     # Evo.py
@@ -59,6 +61,11 @@ if LANGUAGE == 'EN':
     INCORRECT_COMMAND_USAGE = 'Incorrect command usage'
     USAGE = 'Usage'
 
+    # Rooms.py
+    ROOM_PREFIX = '🌌 '
+    ROOM_NAME = '`s room'
+
+
 if LANGUAGE == 'RU':
     # Evo.py
     DEBUG_IS_ON = 'РЕЖИМ ДЕБАГА ВКЛЮЧЕН'
@@ -104,3 +111,6 @@ if LANGUAGE == 'RU':
     COMMAND_INCORRECT_USAGE = 'Неверное использование команды'
     USAGE = 'Использование'
 
+    # Rooms.py
+    ROOM_PREFIX = '🌌 '
+    ROOM_NAME = 'Комната '

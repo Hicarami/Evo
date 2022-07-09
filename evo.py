@@ -4,7 +4,7 @@ from discord.ext import commands
 from config import DEBUG, DEBUG_IS_ON, PREFIX, LOADED, UNLOADED, RELOADED, LOGING_IN
 
 
-if DEBUG == False:
+if DEBUG == True:
     print(DEBUG_IS_ON)
     from dotenv import load_dotenv
     load_dotenv()
