@@ -1,7 +1,7 @@
 # Currently only English and Russian languages are avelible
 # English = EN
 # Russian = RU
-LANGUAGE = 'EN'
+LANGUAGE = 'RU'
 
 # Debug mode loads local dotenv file
 # Turn off debug mode before deploying

@@ -1,2 +1,4 @@
-discord.py
+discord.py[voice]
 pytz
+youtube-dl
+google-api-python-client
